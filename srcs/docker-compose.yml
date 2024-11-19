@@ -1,0 +1,52 @@
+version: '3'
+services:
+  mariadb:
+    container_name: mariadb
+    build: ./requirements/mariadb
+    volumes:
+      - mariadb_volume:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - mynetwork
+    restart: always
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    depends_on:
+      - mariadb
+    volumes: 
+      - wp_volume:/var/www/html
+    env_file: .env
+    networks:
+      - mynetwork
+    restart: always
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    depends_on:
+      - wordpress
+    volumes:
+      - wp_volume:/var/www/html
+    ports:
+      - "443:443"
+    networks:
+      - mynetwork
+    restart: always
+volumes:
+  wp_volume:
+    name: wp_volume
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/alboumed/data/wp_volume
+  mariadb_volume:
+    name: mariadb_volume
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: bind
+      device: /home/alboumed/data/mariadb_volume
+networks:
+  mynetwork:
