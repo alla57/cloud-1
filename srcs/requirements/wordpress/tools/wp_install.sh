@@ -2,7 +2,7 @@
 
 echo "hellodoodododododododododododododoodododododododododod"
 
-if [ -f ./wordpress ]; then
+if [ -d ./wordpress ]; then
     echo "Wordpress already installed"
 else
     echo "Wordpress is installing !"
