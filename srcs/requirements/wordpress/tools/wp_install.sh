@@ -1,6 +1,8 @@
 #!/bin/sh
 
-if [-f ./wordpress ]; then
+echo "hellodoodododododododododododododoodododododododododod"
+
+if [ -f ./wordpress ]; then
     echo "Wordpress already installed"
 else
     echo "Wordpress is installing !"
