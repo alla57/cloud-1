@@ -3,6 +3,7 @@
 if [-f ./wordpress ]; then
     echo "Wordpress already installed"
 else
+    echo "Wordpress is installing !"
     mkdir wordpress
     cd wordpress
     wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
