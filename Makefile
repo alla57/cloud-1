@@ -1,6 +1,6 @@
 all:
 	@sudo mkdir -p /home/alboumed/data/mariadb_volume /home/alboumed/data/wp_volume
-	@sudo docker compose -f ./srcs/docker-compose.yml up --build -d
+	@sudo docker compose -f ./srcs/docker-compose.yml up --build
 	
 restart:
 	@sudo docker compose -f ./srcs/docker-compose.yml stop

@@ -12,5 +12,7 @@ mysql -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$DB_ROOT_PASS
 echo "privilges granted to root"
 mysql -e "FLUSH PRIVILEGES;"
 mysql -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_ROOT_PASSWORD';"
+echo "user config done"
 kill $(cat /var/run/mysqld/mysqld.pid)
+echo "process blabla killed"
 mysqld
