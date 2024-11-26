@@ -33,9 +33,9 @@ RUN chmod +x /usr/local/bin/create_db.sh
 
 EXPOSE 3306
 
-RUN create_db.sh
+# RUN create_db.sh
 
-ENTRYPOINT ["mysqld"]
+ENTRYPOINT ["create_db.sh"]
 # CMD ["/bin/bash"]
 
-# CMD ["mysqld"]
+CMD ["mysqld", "--user=mysql", "--bind-address=0.0.0.0"]
