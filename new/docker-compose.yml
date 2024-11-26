@@ -42,6 +42,8 @@ services:
       - wordpress
     networks:
       - mynetwork
+    ports:
+      - "8080:80"
     restart: always
 volumes:
   wp_volume:
