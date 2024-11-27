@@ -36,14 +36,17 @@ services:
   phpmyadmin:
     container_name: phpmyadmin
     image: phpmyadmin/phpmyadmin
-    env_file: .env
+    environment:
+      - PMA_HOST
+      - PMA_USER
+      - PMA_PASSWORD
     depends_on:
       - mysql
       - wordpress
     networks:
       - mynetwork
-    ports:
-      - "8080:80"
+    # ports:
+    #   - "8080:80"
     restart: always
 volumes:
   wp_volume:
