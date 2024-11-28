@@ -35,7 +35,7 @@ services:
     restart: always
   phpmyadmin:
     container_name: phpmyadmin
-    image: phpmyadmin/phpmyadmin
+    build: ./phpmyadmin
     environment:
       - PMA_HOST
       - PMA_USER
@@ -43,6 +43,8 @@ services:
     depends_on:
       - mysql
       - wordpress
+    volumes:
+      - wp_volume:/var/www/html
     networks:
       - mynetwork
     # ports:
