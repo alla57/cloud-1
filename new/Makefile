@@ -1,6 +1,6 @@
 all:
 	@sudo mkdir -p /home/alboumed/data/mysql_volume /home/alboumed/data/wp_volume /home/alboumed/data/phpmyadmin_volume
-	@sudo docker compose -f ./docker-compose.yml up --build
+	@sudo docker compose -f ./docker-compose.yml up --build -d
 	
 restart:
 	@sudo docker compose -f ./docker-compose.yml stop
