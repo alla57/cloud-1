@@ -1,117 +1,36 @@
 <?php
 /**
- * Debian local configuration file
+ * phpMyAdmin sample configuration, you can use it as base for
+ * manual configuration. For easier setup you can use setup/
  *
- * This file overrides the settings made by phpMyAdmin interactive setup
- * utility.
- *
- * For example configuration see
- *   /usr/share/doc/phpmyadmin/examples/config.sample.inc.php
- * or
- *   /usr/share/doc/phpmyadmin/examples/config.manyhosts.inc.php
- *
- * NOTE: do not add security sensitive data to this file (like passwords)
- * unless you really know what you're doing. If you do, any user that can
- * run PHP or CGI on your webserver will be able to read them. If you still
- * want to do this, make sure to properly secure the access to this file
- * (also on the filesystem level).
+ * All directives are explained in documentation in the doc/ folder
+ * or at <https://docs.phpmyadmin.net/>.
  */
 
-if (!function_exists('check_file_access')) {
-    function check_file_access(string $path): bool
-    {
-        if (is_readable($path)) {
-            return true;
-        }
-
-        if (! file_exists($path)) {
-            return false;
-        }
-
-        error_log(
-            'phpmyadmin: Failed to load ' . $path
-            . ' Check group www-data has read access and open_basedir restrictions.'
-        );
-        return false;
-    }
-}
-
-// Load secret generated on postinst
-if (check_file_access('/var/lib/phpmyadmin/blowfish_secret.inc.php')) {
-    require('/var/lib/phpmyadmin/blowfish_secret.inc.php');
-}
+declare(strict_types=1);
 
 /**
- * Server(s) configuration
+ * This is needed for cookie based authentication to encrypt the cookie.
+ * Needs to be a 32-bytes long string of random bytes. See FAQ 2.10.
+ */
+$cfg['blowfish_secret'] = 'a8B7c6D5e4F3g2H1j0K9l8M7n6O5p4Q3'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
+
+/**
+ * Servers configuration
  */
 $i = 0;
-// The $cfg['Servers'] array starts with $cfg['Servers'][1].  Do not use $cfg['Servers'][0].
-// You can disable a server config entry by setting host to ''.
-$i++;
 
 /**
- * Read configuration from dbconfig-common
- * You can regenerate it using: dpkg-reconfigure -plow phpmyadmin
+ * First server
  */
-if (check_file_access('/etc/phpmyadmin/config-db.php')) {
-    require('/etc/phpmyadmin/config-db.php');
-}
-
-/* Configure according to dbconfig-common if enabled */
-if (!empty($dbname)) {
-    /* Authentication type */
-    $cfg['Servers'][$i]['auth_type'] = 'cookie';
-    /* Server parameters */
-    if (empty($dbserver)) $dbserver = 'localhost';
-    $cfg['Servers'][$i]['host'] = $dbserver;
-
-    if (!empty($dbport) || $dbserver != 'localhost') {
-        $cfg['Servers'][$i]['connect_type'] = 'tcp';
-        $cfg['Servers'][$i]['port'] = $dbport;
-    }
-    //$cfg['Servers'][$i]['compress'] = false;
-    /* Optional: User for advanced features */
-    $cfg['Servers'][$i]['controluser'] = $dbuser;
-    $cfg['Servers'][$i]['controlpass'] = $dbpass;
-    /* Optional: Advanced phpMyAdmin features */
-    $cfg['Servers'][$i]['pmadb'] = $dbname;
-    $cfg['Servers'][$i]['bookmarktable'] = 'pma__bookmark';
-    $cfg['Servers'][$i]['relation'] = 'pma__relation';
-    $cfg['Servers'][$i]['table_info'] = 'pma__table_info';
-    $cfg['Servers'][$i]['table_coords'] = 'pma__table_coords';
-    $cfg['Servers'][$i]['pdf_pages'] = 'pma__pdf_pages';
-    $cfg['Servers'][$i]['column_info'] = 'pma__column_info';
-    $cfg['Servers'][$i]['history'] = 'pma__history';
-    $cfg['Servers'][$i]['table_uiprefs'] = 'pma__table_uiprefs';
-    $cfg['Servers'][$i]['tracking'] = 'pma__tracking';
-    $cfg['Servers'][$i]['userconfig'] = 'pma__userconfig';
-    $cfg['Servers'][$i]['recent'] = 'pma__recent';
-    $cfg['Servers'][$i]['favorite'] = 'pma__favorite';
-    $cfg['Servers'][$i]['users'] = 'pma__users';
-    $cfg['Servers'][$i]['usergroups'] = 'pma__usergroups';
-    $cfg['Servers'][$i]['navigationhiding'] = 'pma__navigationhiding';
-    $cfg['Servers'][$i]['savedsearches'] = 'pma__savedsearches';
-    $cfg['Servers'][$i]['central_columns'] = 'pma__central_columns';
-    $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
-    $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
-
-    /* Uncomment the following to enable logging in to passwordless accounts,
-     * after taking note of the associated security risks. */
-    // $cfg['Servers'][$i]['AllowNoPassword'] = TRUE;
-
-    /* Advance to next server for rest of config */
-    $i++;
-}
-
+$i++;
 /* Authentication type */
-//$cfg['Servers'][$i]['auth_type'] = 'cookie';
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
 /* Server parameters */
-//$cfg['Servers'][$i]['host'] = 'localhost';
-//$cfg['Servers'][$i]['connect_type'] = 'tcp';
-//$cfg['Servers'][$i]['compress'] = false;
-/* Uncomment the following to enable logging in to passwordless accounts,
- * after taking note of the associated security risks. */
-// $cfg['Servers'][$i]['AllowNoPassword'] = TRUE;
+$cfg['Servers'][$i]['host'] = 'mysql';
+$cfg['Servers'][$i]['port'] = '3306';
+$cfg['Servers'][$i]['compress'] = false;
+$cfg['Servers'][$i]['AllowNoPassword'] = false;
 
 /**
  * phpMyAdmin configuration storage settings.
@@ -145,19 +64,98 @@ if (!empty($dbname)) {
 // $cfg['Servers'][$i]['designer_settings'] = 'pma__designer_settings';
 // $cfg['Servers'][$i]['export_templates'] = 'pma__export_templates';
 
-/*
+/**
  * End of servers configuration
  */
 
-/*
+/**
  * Directories for saving/loading files from server
  */
 $cfg['UploadDir'] = '';
 $cfg['SaveDir'] = '';
 
-/* Support additional configurations */
-foreach (glob('/etc/phpmyadmin/conf.d/*.php') as $filename)
-{
-    include($filename);
-}
+/**
+ * Whether to display icons or text or both icons and text in table row
+ * action segment. Value can be either of 'icons', 'text' or 'both'.
+ * default = 'both'
+ */
+//$cfg['RowActionType'] = 'icons';
 
+/**
+ * Defines whether a user should be displayed a "show all (records)"
+ * button in browse mode or not.
+ * default = false
+ */
+//$cfg['ShowAll'] = true;
+
+/**
+ * Number of rows displayed when browsing a result set. If the result
+ * set contains more rows, "Previous" and "Next".
+ * Possible values: 25, 50, 100, 250, 500
+ * default = 25
+ */
+//$cfg['MaxRows'] = 50;
+
+/**
+ * Disallow editing of binary fields
+ * valid values are:
+ *   false    allow editing
+ *   'blob'   allow editing except for BLOB fields
+ *   'noblob' disallow editing except for BLOB fields
+ *   'all'    disallow editing
+ * default = 'blob'
+ */
+//$cfg['ProtectBinary'] = false;
+
+/**
+ * Default language to use, if not browser-defined or user-defined
+ * (you find all languages in the locale folder)
+ * uncomment the desired line:
+ * default = 'en'
+ */
+//$cfg['DefaultLang'] = 'en';
+//$cfg['DefaultLang'] = 'de';
+
+/**
+ * How many columns should be used for table display of a database?
+ * (a value larger than 1 results in some information being hidden)
+ * default = 1
+ */
+//$cfg['PropertiesNumColumns'] = 2;
+
+/**
+ * Set to true if you want DB-based query history.If false, this utilizes
+ * JS-routines to display query history (lost by window close)
+ *
+ * This requires configuration storage enabled, see above.
+ * default = false
+ */
+//$cfg['QueryHistoryDB'] = true;
+
+/**
+ * When using DB-based query history, how many entries should be kept?
+ * default = 25
+ */
+//$cfg['QueryHistoryMax'] = 100;
+
+/**
+ * Whether or not to query the user before sending the error report to
+ * the phpMyAdmin team when a JavaScript error occurs
+ *
+ * Available options
+ * ('ask' | 'always' | 'never')
+ * default = 'ask'
+ */
+//$cfg['SendErrorReports'] = 'always';
+
+/**
+ * 'URLQueryEncryption' defines whether phpMyAdmin will encrypt sensitive data from the URL query string.
+ * 'URLQueryEncryptionSecretKey' is a 32 bytes long secret key used to encrypt/decrypt the URL query string.
+ */
+//$cfg['URLQueryEncryption'] = true;
+//$cfg['URLQueryEncryptionSecretKey'] = '';
+
+/**
+ * You can find more configuration options in the documentation
+ * in the doc/ folder or at <https://docs.phpmyadmin.net/>.
+ */

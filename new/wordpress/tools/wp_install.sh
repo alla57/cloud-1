@@ -2,11 +2,11 @@
 
 echo "hellodoodododododododododododododoodododododododododod"
 
-if [ -d ./wordpress ]; then
+if [ -d ./wordpress/wp-admin ]; then
     echo "Wordpress already installed"
 else
     echo "Wordpress is installing !"
-    mkdir wordpress
+    # mkdir wordpress
     cd wordpress
     wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
     chmod +x wp-cli.phar

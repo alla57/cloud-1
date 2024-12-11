@@ -1,5 +1,5 @@
 all:
-	@sudo mkdir -p /home/alboumed/data/mysql_volume /home/alboumed/data/wp_volume
+	@sudo mkdir -p /home/alboumed/data/mysql_volume /home/alboumed/data/wp_volume /home/alboumed/data/phpmyadmin_volume
 	@sudo docker compose -f ./docker-compose.yml up --build
 	
 restart:
@@ -18,7 +18,7 @@ down:
 clean:
 	@sudo docker compose -f ./docker-compose.yml stop
 	@sudo docker compose -f ./docker-compose.yml rm
-	@sudo docker volume rm mysql_volume wp_volume
+	@sudo docker volume rm mysql_volume wp_volume phpmyadmin_volume
 	@sudo sudo rm -rf /home/alboumed/data
 	@sudo docker rmi -f $$(sudo docker images -aq)
 

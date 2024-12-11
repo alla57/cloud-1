@@ -1,6 +1,6 @@
 FROM debian:12
 
-ENV DB_NAME=wordpress_db DB_USER=user DB_PASSWORD=db_P4sswrd DB_HOST=mariadb DB_ROOT_PASSWORD=db_root_P4sswrd
+# ENV DB_NAME=wordpress_db DB_USER=user DB_PASSWORD=db_P4sswrd DB_HOST=mysql DB_ROOT_PASSWORD=db_root_P4sswrd
 
 # Set environment to suppress prompts
 ENV DEBIAN_FRONTEND=noninteractive
